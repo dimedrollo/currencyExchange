@@ -50,7 +50,6 @@ public class CurrencyFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private CurrencyAdapter mCurrencyAdapter;
     private MenuItem mRefresh;
-    private TextView mDateTextView;
 
 
     @Override
@@ -59,13 +58,11 @@ public class CurrencyFragment extends Fragment {
         setHasOptionsMenu(true);
         setRetainInstance(true);
 
+
     }
 
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
+
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
@@ -119,6 +116,7 @@ public class CurrencyFragment extends Fragment {
             mCharCode = itemView.findViewById(R.id.charcode);
             mNominal = itemView.findViewById(R.id.nominal);
             mName = itemView.findViewById(R.id.name);
+            mName.setSelected(true);
             mName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

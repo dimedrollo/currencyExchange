@@ -4,7 +4,6 @@ import android.database.Cursor;
 
 
 import ru.dopegeek.currencyexchange.Currency;
-import ru.dopegeek.currencyexchange.Valute;
 
 public class MyCursorWrapper extends android.database.CursorWrapper {
 
