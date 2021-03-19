@@ -15,13 +15,13 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("create table " + DbSchema.ImgTable.NAME + "(" +
+        db.execSQL("create table " + DbSchema.CurrencyTable.NAME + "(" +
                 " _id integer primary key autoincrement, " +
-                DbSchema.ImgTable.Cols.ID + ", " +
-                DbSchema.ImgTable.Cols.CHARCODE + ", " +
-                DbSchema.ImgTable.Cols.NOMINAL+ ", " +
-                DbSchema.ImgTable.Cols.NAME + ", " +
-                DbSchema.ImgTable.Cols.VALUE + ")"
+
+                DbSchema.CurrencyTable.Cols.CHARCODE + ", " +
+                DbSchema.CurrencyTable.Cols.NOMINAL+ ", " +
+                DbSchema.CurrencyTable.Cols.NAME + ", " +
+                DbSchema.CurrencyTable.Cols.VALUE + ")"
         );
 
     }

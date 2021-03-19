@@ -1,14 +1,33 @@
 package ru.dopegeek.currencyexchange;
 
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+
 import java.io.IOException;
-import java.net.URLConnection;
 
-public class CurrencyDownloader {
+import ru.dopegeek.currencyexchange.response.OptionalResponse;
+import ru.dopegeek.currencyexchange.response.ResponseModel;
 
-URLConnection mURLConnection = new URLConnection() {
-    @Override
-    public void connect() throws IOException {
+public  class CurrencyDownloader {
 
+    private static final String CURRENCY_SOURCE = "https://www.cbr-xml-daily.ru/daily_json.js";
+    private static final int TIMEOUT = 100000;
+    private static final String USER_AGENT = "currencyExchange";
+
+
+    public static OptionalResponse getCurrency()  {
+        try {
+            Connection.Response response = Jsoup.connect(CURRENCY_SOURCE)
+                    .ignoreContentType(true)
+                    .ignoreHttpErrors(true)
+                    .method(Connection.Method.GET)
+                    .timeout(TIMEOUT)
+                    .userAgent(USER_AGENT)
+                    .execute();
+            return OptionalResponse.of(response);
+        } catch (IOException e) {
+            throw new RuntimeException("I/O exception was catched while try get currencies!",e);
+        }
     }
-}
+
 }

@@ -3,26 +3,45 @@ package ru.dopegeek.currencyexchange.response;
 public class ResponseModelCurrency {
 
 
-        private String id;
-        private String numCode;
-        private String charCode;
-        private String nominal;
-        private String name;
-        private String value;
-        private String previous;
+
+        public String ID;
+        public String NumCode;
+        public String CharCode;
+        public String Nominal;
+        public String Name;
+        public String Value;
+        public String Previous;
+
+        public String getCharCode() {
+                return CharCode;
+        }
+
+        public String getNominal() {
+                return Nominal;
+        }
+
+        public String getName() {
+                return Name;
+        }
+
+        public String getValue() {
+                return Value;
+        }
+
+
 
 
 
         @Override
         public String toString() {
-            return "ru.dopegeek.currencyexchange.Currency{"
-                    + "id=" + id + ", "
-                    + "numCode=" + numCode + ", "
-                    + "charCode=" + charCode + ", "
-                    + "nominal=" + nominal + ", "
-                    + "name=" + name + ", "
-                    + "value=" + value + ", "
-                    + "previous=" + previous + "}";
+            return "Currency{"
+                    + "id=" + ID + ", "
+                    + "NumCode=" + NumCode + ", "
+                    + "charCode=" + CharCode + ", "
+                    + "nominal=" + Nominal + ", "
+                    + "name=" + Name + ", "
+                    + "value=" + Value + ", "
+                    + "previous=" + Previous + "}";
         }
     }
 

@@ -2,7 +2,9 @@ package ru.dopegeek.currencyexchange.database;
 
 import android.database.Cursor;
 
+
 import ru.dopegeek.currencyexchange.Currency;
+import ru.dopegeek.currencyexchange.Valute;
 
 public class MyCursorWrapper extends android.database.CursorWrapper {
 
@@ -12,18 +14,16 @@ public class MyCursorWrapper extends android.database.CursorWrapper {
 
     public Currency getData() {
 
-        String id = getString(getColumnIndex(DbSchema.ImgTable.Cols.ID));
-        String charCode = getString(getColumnIndex(DbSchema.ImgTable.Cols.CHARCODE));
-        String nominal = getString(getColumnIndex(DbSchema.ImgTable.Cols.NOMINAL));
-        String name = getString(getColumnIndex(DbSchema.ImgTable.Cols.NAME));
-        String value = getString(getColumnIndex(DbSchema.ImgTable.Cols.VALUE));
+        String charCode = getString(getColumnIndex(DbSchema.CurrencyTable.Cols.CHARCODE));
+        String nominal = getString(getColumnIndex(DbSchema.CurrencyTable.Cols.NOMINAL));
+        String name = getString(getColumnIndex(DbSchema.CurrencyTable.Cols.NAME));
+        String value = getString(getColumnIndex(DbSchema.CurrencyTable.Cols.VALUE));
 
         Currency currency = new Currency();
-        currency.setId(id);
         currency.setCharCode(charCode);
-        currency.setNominal(nominal);
+        currency.setNominal(Integer.parseInt(nominal));
         currency.setName(name);
-        currency.setValue(value);
+        currency.setValue(Float.parseFloat(value));
         return currency;
     }
 

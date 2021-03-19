@@ -1,6 +1,8 @@
 package ru.dopegeek.currencyexchange.response;
 
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -25,7 +27,8 @@ public class OptionalResponse {
     private final int statusCode;
     private final String statusMessage;
 
-    private OptionalResponse(ResponseModel response, String rawResponse, int statusCode, String statusMessage) {
+
+    public OptionalResponse(ResponseModel response, String rawResponse, int statusCode, String statusMessage) {
         this.response = response;
         this.rawResponse = rawResponse;
 
@@ -49,6 +52,7 @@ public class OptionalResponse {
             return new OptionalResponse(null, body, status, statusMessage);
 
         ResponseModel model = GSON.fromJson(body, ResponseModel.class);
+
         return new OptionalResponse(model, body, status, statusMessage);
     }
 
@@ -111,7 +115,7 @@ public class OptionalResponse {
     public String toString() {
         return "OptionalResponse{"
                 + "present=" + isPresent() + ", "
-                + "ru.dopegeek.currencyexchange.response=" + response + ", "
+                + "response=" + response + ", "
                 + "rawResponse=" + rawResponse + ", "
                 + "statusCode=" + statusCode
                 + ", statusMessage=" + statusMessage + "}";
