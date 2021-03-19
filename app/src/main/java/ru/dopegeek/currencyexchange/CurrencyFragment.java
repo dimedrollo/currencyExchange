@@ -1,15 +1,30 @@
 package ru.dopegeek.currencyexchange;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Layout;
+import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +40,9 @@ import java.util.Objects;
 import ru.dopegeek.currencyexchange.response.OptionalResponse;
 import ru.dopegeek.currencyexchange.response.ResponseModelCurrency;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
+import static ru.dopegeek.currencyexchange.CurrencyFactory.sCurrencyFactory;
 import static ru.dopegeek.currencyexchange.CurrencyFactory.sCurrencyList;
 
 public class CurrencyFragment extends Fragment {
@@ -39,6 +57,19 @@ public class CurrencyFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        setRetainInstance(true);
+
+    }
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
     }
 
     @Nullable
@@ -47,7 +78,14 @@ public class CurrencyFragment extends Fragment {
         View v = inflater.inflate(R.layout.activity_currency, container,false);
         mRecyclerView = v.findViewById(R.id.currency_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        updateUI();
         return v;
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        updateUI();
     }
 
     @Override
@@ -72,6 +110,8 @@ public class CurrencyFragment extends Fragment {
         private final TextView mNominal;
         private final TextView mName;
         private final TextView mValue;
+        private Currency mCurrency;
+
 
 
         public CurrencyHolder(LayoutInflater inflater,ViewGroup parent){
@@ -79,10 +119,18 @@ public class CurrencyFragment extends Fragment {
             mCharCode = itemView.findViewById(R.id.charcode);
             mNominal = itemView.findViewById(R.id.nominal);
             mName = itemView.findViewById(R.id.name);
+            mName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        showPopupWindow(v, mCurrency);
+                    }
+
+            });
             mValue = itemView.findViewById(R.id.value);
         }
 
         public void bind(Currency currency){
+            mCurrency = currency;
             mCharCode.setText(currency.getCharCode());
             mNominal.setText(currency.getNominal()+"");
             mName.setText(currency.getName());
@@ -150,5 +198,38 @@ public class CurrencyFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
                     }
     }
+
+    private void showPopupWindow(View v, Currency cur) {
+
+       View customView = LayoutInflater.from(getContext()).inflate(R.layout.popup_window,null);
+       EditText input = customView.findViewById(R.id.input_popup);
+       TextView output = customView.findViewById(R.id.output_popup);
+       output.setText(String.format("%s", cur.getValue()));
+
+        final TextWatcher calculateWatcher = new TextWatcher() {
+           @Override
+           public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+           }
+
+           @Override
+           public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+           }
+           @Override
+           public void afterTextChanged(Editable editable) {
+            if(editable.length()!=0) output.setText(String.format("%s", cur.getNominal() / cur.getValue() * Float.parseFloat(input.getText().toString())));
+           }
+       };
+        input.addTextChangedListener(calculateWatcher);
+
+
+       TextView charcodePopup = customView.findViewById(R.id.charcode_popup);
+       charcodePopup.setText(cur.getCharCode());
+        PopupWindow popupWindow =  new PopupWindow(customView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setFocusable(true);
+        popupWindow.update();
+        popupWindow.showAtLocation(v, Gravity.CENTER, 0,0);
+    }
+
+
 
 }
